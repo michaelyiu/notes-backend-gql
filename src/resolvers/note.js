@@ -4,8 +4,6 @@ import { isAuthenticated, hasNote } from "./authorization";
 export default {
   Query: {
     notes: async (parent, args, { models }, info) => {
-      // 1. getNotes
-      // 2. getUser of each note
       return models.Note.find().sort({ date: -1 });
     },
     note: async (parent, args, { models }, info) => {
@@ -17,12 +15,11 @@ export default {
     createNote: combineResolvers(
       isAuthenticated,
       async (parent, args, { me, models }, info) => {
-        const { text, name, avatar } = args;
+        const { title, body } = args;
 
         const newNote = await models.Note.create({
-          text,
-          name,
-          avatar,
+          title,
+          body,
           user: me.id,
         });
         return newNote;

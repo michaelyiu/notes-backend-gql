@@ -6,19 +6,6 @@ import resolvers from "../resolvers";
 import schemas from "../schema";
 
 import config from "../config/keys";
-// Construct a schema, using GraphQL schema language
-// const schemas = gql`
-//   type Query {
-//     hello: String
-//   }
-// `;
-
-// Provide resolver functions for your schema fields
-// const resolvers = {
-//   Query: {
-//     hello: () => 'Hello world!',
-//   },
-// };
 
 //validate jwt then set me in graphql server context
 const getMe = async (token) => {
@@ -29,8 +16,7 @@ const getMe = async (token) => {
       })
       return user;
     } catch (e) {
-      console.log(e)
-      return new AuthenticationError("Your Session expired. Sign in again.");
+      throw new AuthenticationError("Your Session expired. Sign in again.");
     }
   }
 };

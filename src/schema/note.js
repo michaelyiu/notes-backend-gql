@@ -8,7 +8,7 @@ export default gql`
 
   extend type Mutation {
     createNote(
-      title: String
+      title: String!
       body: String!
     ): Note
 
