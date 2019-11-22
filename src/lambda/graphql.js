@@ -1,7 +1,7 @@
 import { ApolloServer, AuthenticationError, gql } from "apollo-server-lambda";
 import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
-// import models from "../models";
+import models from "../models";
 // import resolvers from "../resolvers";
 // import schemas from "../schema";
 
@@ -42,7 +42,7 @@ const server = new ApolloServer({
   context: async ({ event, context }) => {
     const user = await getMe(event.headers.authorization);
     return {
-      // models,
+      models,
       me: user,
       secret: config.SECRET
     };
