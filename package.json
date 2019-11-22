@@ -7,8 +7,8 @@
     "build": "run-p build:**",
     "start": "nodemon --exec babel-node src/lambda/graphql.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start:lambda": "netlify-lambda serve src/lambda && node -p process.env",
-    "build:lambda": "netlify-lambda build src/lambda && node -p process.env"
+    "start:lambda": "netlify-lambda serve src/lambda --config webpack.functions.js",
+    "build:lambda": "netlify-lambda build src/lambda --config webpack.functions.js"
   },
   "author": "",
   "license": "ISC",
@@ -28,6 +28,7 @@
     "@babel/core": "^7.1.2",
     "@babel/node": "7.0.0",
     "@babel/preset-env": "^7.6.2",
-    "nodemon": "^1.19.2"
+    "nodemon": "^1.19.2",
+    "webpack-node-externals": "^1.7.2"
   }
 }
