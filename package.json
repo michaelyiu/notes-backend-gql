@@ -1,5 +1,5 @@
 {
-  "name": "devshub-server-gql",
+  "name": "notes-backend-gql",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -22,7 +22,8 @@
     "graphql-resolvers": "^0.3.3",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.7.1",
-    "netlify-lambda": "^1.6.3"
+    "netlify-lambda": "^1.6.3",
+    "validator": "^11.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.1.2",

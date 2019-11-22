@@ -2,23 +2,23 @@ import { ApolloServer, AuthenticationError, gql } from "apollo-server-lambda";
 import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
 import models from "../models";
-// import resolvers from "../resolvers";
-// import schemas from "../schema";
+import resolvers from "../resolvers";
+import schemas from "../schema";
 
 import config from "../config/keys";
 // Construct a schema, using GraphQL schema language
-const schemas = gql`
-  type Query {
-    hello: String
-  }
-`;
+// const schemas = gql`
+//   type Query {
+//     hello: String
+//   }
+// `;
 
 // Provide resolver functions for your schema fields
-const resolvers = {
-  Query: {
-    hello: () => 'Hello world!',
-  },
-};
+// const resolvers = {
+//   Query: {
+//     hello: () => 'Hello world!',
+//   },
+// };
 
 //validate jwt then set me in graphql server context
 const getMe = async (token) => {
@@ -51,7 +51,7 @@ const server = new ApolloServer({
 
 //connect mongo dbs
 const db = config.MONGO_URI;
-
+console.log(db);
 mongoose
   .connect(db, { useNewUrlParser: true, useFindAndModify: false, useUnifiedTopology: true })
   .then(() => console.log("MongoDB Connected"))
