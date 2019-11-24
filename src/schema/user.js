@@ -29,7 +29,6 @@ export default gql`
   type User {
     name: String!
     email: String!
-    avatar: String
     date: String
   }
 `;

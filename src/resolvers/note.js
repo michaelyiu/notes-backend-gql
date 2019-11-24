@@ -3,8 +3,8 @@ import { isAuthenticated, hasNote } from "./authorization";
 
 export default {
   Query: {
-    notes: async (parent, args, { models }, info) => {
-      return models.Note.find().sort({ date: -1 });
+    notes: async (parent, args, { me, models }, info) => {
+      return models.Note.find({ user: me.id }).sort({ date: -1 });
     },
     note: async (parent, args, { models }, info) => {
       const note = models.Note.findById(args.id);
@@ -29,7 +29,13 @@ export default {
     deleteNote: combineResolvers(
       isAuthenticated,
       async (parent, args, { me, models }, info) => {
-        const note = await models.Note.findById(args.id);
+        const note = await models.Note
+          .findById(args.id)
+
+        if (!note) {
+          throw new Error("Note not found");
+        }
+        console.log(note);
         if (note.user.toString() !== me.id) {
           throw new Error("User not authorized");
         }
@@ -38,9 +44,9 @@ export default {
           .remove()
           .then(note)
           .catch(err => {
+            console.log(err)
             throw new Error("Note not found");
           });
-
         return true;
       }
     )
