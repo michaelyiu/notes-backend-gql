@@ -326,6 +326,15 @@ __webpack_require__.r(__webpack_exports__);
       });
       return newNote;
     }),
+    editNote: Object(graphql_resolvers__WEBPACK_IMPORTED_MODULE_0__["combineResolvers"])(_authorization__WEBPACK_IMPORTED_MODULE_1__["isAuthenticated"], async (parent, args, {
+      me,
+      models
+    }, info) => {
+      const editedNote = await models.Note.findByIdAndUpdate(args.id, args, {
+        new: true
+      });
+      return editedNote;
+    }),
     deleteNote: Object(graphql_resolvers__WEBPACK_IMPORTED_MODULE_0__["combineResolvers"])(_authorization__WEBPACK_IMPORTED_MODULE_1__["isAuthenticated"], async (parent, args, {
       me,
       models
@@ -547,6 +556,12 @@ __webpack_require__.r(__webpack_exports__);
       body: String!
     ): Note
 
+    editNote(
+      id: ID!
+      title: String!
+      body: String!
+    ): Note
+
     deleteNote(id: ID!): Boolean
   }
 
@@ -737,8 +752,6 @@ __webpack_require__.r(__webpack_exports__);
  //validate jwt then set me in graphql server context
 
 const getMe = async token => {
-  console.log(token);
-
   if (token) {
     try {
       const user = await jsonwebtoken__WEBPACK_IMPORTED_MODULE_2___default.a.verify(token, _config_keys__WEBPACK_IMPORTED_MODULE_6___default.a.SECRET, {

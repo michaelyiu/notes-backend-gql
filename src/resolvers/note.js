@@ -26,6 +26,15 @@ export default {
       }
     ),
 
+    editNote: combineResolvers(
+      isAuthenticated,
+      async (parent, args, { me, models }, info) => {
+        const editedNote = await models.Note.findByIdAndUpdate(args.id, args, { new: true })
+
+        return editedNote;
+      }
+    ),
+
     deleteNote: combineResolvers(
       isAuthenticated,
       async (parent, args, { me, models }, info) => {

@@ -12,6 +12,12 @@ export default gql`
       body: String!
     ): Note
 
+    editNote(
+      id: ID!
+      title: String!
+      body: String!
+    ): Note
+
     deleteNote(id: ID!): Boolean
   }
 
