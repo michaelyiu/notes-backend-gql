@@ -56,7 +56,7 @@ export default {
             console.log(err)
             throw new Error("Note not found");
           });
-        return true;
+        return note.id;
       }
     )
   }

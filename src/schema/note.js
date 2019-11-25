@@ -18,7 +18,7 @@ export default gql`
       body: String!
     ): Note
 
-    deleteNote(id: ID!): Boolean
+    deleteNote(id: ID!): ID
   }
 
   type Note {

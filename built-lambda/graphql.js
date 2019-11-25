@@ -355,7 +355,7 @@ __webpack_require__.r(__webpack_exports__);
         console.log(err);
         throw new Error("Note not found");
       });
-      return true;
+      return note.id;
     })
   }
 });
@@ -562,7 +562,7 @@ __webpack_require__.r(__webpack_exports__);
       body: String!
     ): Note
 
-    deleteNote(id: ID!): Boolean
+    deleteNote(id: ID!): ID
   }
 
   type Note {
