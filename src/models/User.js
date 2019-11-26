@@ -15,10 +15,18 @@ const UserSchema = new Schema({
 		type: String,
 		required: true
 	},
-	date: {
+	created_at: {
+		type: Date,
+		default: Date.now
+	},
+	updated_at: {
 		type: Date,
 		default: Date.now
 	}
+});
+
+UserSchema.pre('findOneAndUpdate', function () {
+	this.update({}, { $set: { updated_at: new Date() } });
 });
 
 module.exports = mongoose.model("users", UserSchema);

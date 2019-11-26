@@ -29,6 +29,7 @@ export default gql`
   type User {
     name: String!
     email: String!
-    date: String
+    created_at: Date
+    updated_at: Date
   }
 `;

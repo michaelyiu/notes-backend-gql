@@ -26,6 +26,7 @@ export default gql`
     title: String!
     body: String!
     user: String
-    date: Date
+    created_at: Date
+    updated_at: Date
   }
 `;

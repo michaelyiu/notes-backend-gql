@@ -15,11 +15,19 @@ const NoteSchema = new Schema({
 		type: String,
 		required: true
 	},
-	date: {
+	created_at: {
+		type: Date,
+		default: Date.now
+	},
+	updated_at: {
 		type: Date,
 		default: Date.now
 	}
 })
 
+NoteSchema.pre('findOneAndUpdate', function () {
+	console.log('middleware triggered')
+	this.update({}, { $set: { updated_at: new Date() } });
+});
 
 module.exports = mongoose.model("note", NoteSchema);

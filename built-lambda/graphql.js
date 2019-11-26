@@ -167,10 +167,22 @@ const NoteSchema = new Schema({
     type: String,
     required: true
   },
-  date: {
+  created_at: {
+    type: Date,
+    default: Date.now
+  },
+  updated_at: {
     type: Date,
     default: Date.now
   }
+});
+NoteSchema.pre('findOneAndUpdate', function () {
+  console.log('middleware triggered');
+  this.update({}, {
+    $set: {
+      updated_at: new Date()
+    }
+  });
 });
 module.exports = mongoose.model("note", NoteSchema);
 
@@ -200,10 +212,21 @@ const UserSchema = new Schema({
     type: String,
     required: true
   },
-  date: {
+  created_at: {
+    type: Date,
+    default: Date.now
+  },
+  updated_at: {
     type: Date,
     default: Date.now
   }
+});
+UserSchema.pre('findOneAndUpdate', function () {
+  this.update({}, {
+    $set: {
+      updated_at: new Date()
+    }
+  });
 });
 module.exports = mongoose.model("users", UserSchema);
 
@@ -300,7 +323,7 @@ __webpack_require__.r(__webpack_exports__);
       return models.Note.find({
         user: me.id
       }).sort({
-        date: -1
+        updated_at: -1
       });
     },
     note: async (parent, args, {
@@ -318,7 +341,15 @@ __webpack_require__.r(__webpack_exports__);
       const {
         title,
         body
-      } = args;
+      } = args; // const newNote = new models.Note({
+      //   title,
+      //   body,
+      //   user: me.id,
+      // })
+      // newNote.save((err) => {
+      //   if (err) throw new Error("Couldnt add post")
+      // })
+
       const newNote = await models.Note.create({
         title,
         body,
@@ -330,8 +361,10 @@ __webpack_require__.r(__webpack_exports__);
       me,
       models
     }, info) => {
+      // const editedNote = await models.Note.updateOne({ _id: args.id }, { $set: { args } }, { new: true })
       const editedNote = await models.Note.findByIdAndUpdate(args.id, args, {
-        new: true
+        new: true,
+        'upsert': true
       });
       return editedNote;
     }),
@@ -570,7 +603,8 @@ __webpack_require__.r(__webpack_exports__);
     title: String!
     body: String!
     user: String
-    date: Date
+    created_at: Date
+    updated_at: Date
   }
 `);
 
@@ -617,7 +651,8 @@ __webpack_require__.r(__webpack_exports__);
   type User {
     name: String!
     email: String!
-    date: String
+    created_at: Date
+    updated_at: Date
   }
 `);
 

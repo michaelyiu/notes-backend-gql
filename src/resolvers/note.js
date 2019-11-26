@@ -4,7 +4,7 @@ import { isAuthenticated, hasNote } from "./authorization";
 export default {
   Query: {
     notes: async (parent, args, { me, models }, info) => {
-      return models.Note.find({ user: me.id }).sort({ date: -1 });
+      return models.Note.find({ user: me.id }).sort({ updated_at: -1 });
     },
     note: async (parent, args, { models }, info) => {
       const note = models.Note.findById(args.id);
@@ -17,6 +17,14 @@ export default {
       async (parent, args, { me, models }, info) => {
         const { title, body } = args;
 
+        // const newNote = new models.Note({
+        //   title,
+        //   body,
+        //   user: me.id,
+        // })
+        // newNote.save((err) => {
+        //   if (err) throw new Error("Couldnt add post")
+        // })
         const newNote = await models.Note.create({
           title,
           body,
@@ -29,7 +37,8 @@ export default {
     editNote: combineResolvers(
       isAuthenticated,
       async (parent, args, { me, models }, info) => {
-        const editedNote = await models.Note.findByIdAndUpdate(args.id, args, { new: true })
+        // const editedNote = await models.Note.updateOne({ _id: args.id }, { $set: { args } }, { new: true })
+        const editedNote = await models.Note.findByIdAndUpdate(args.id, args, { new: true, 'upsert': true })
 
         return editedNote;
       }
