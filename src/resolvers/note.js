@@ -4,7 +4,13 @@ import { isAuthenticated, hasNote } from "./authorization";
 export default {
   Query: {
     notes: async (parent, args, { me, models }, info) => {
-      return models.Note.find({ user: me.id }).sort({ updated_at: -1 });
+      const notes = await models.Note.find({ user: me.id }).sort({ updated_at: -1 })
+
+      return notes.filter(note => note.title.includes(args.filter) || note.body.includes(args.filter))
+
+      // }
+
+      // return models.Note.find({ user: me.id }).sort({ updated_at: -1 });
     },
     note: async (parent, args, { models }, info) => {
       const note = models.Note.findById(args.id);

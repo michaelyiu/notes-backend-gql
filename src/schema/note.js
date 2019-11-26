@@ -3,7 +3,7 @@ import { gql } from "apollo-server-lambda";
 export default gql`
   extend type Query {
     note(id: ID!): Note
-    notes: [Note]
+    notes(filter: String): [Note]
   }
 
   extend type Mutation {

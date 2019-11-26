@@ -320,11 +320,13 @@ __webpack_require__.r(__webpack_exports__);
       me,
       models
     }, info) => {
-      return models.Note.find({
+      const notes = await models.Note.find({
         user: me.id
       }).sort({
         updated_at: -1
       });
+      return notes.filter(note => note.title.includes(args.filter) || note.body.includes(args.filter)); // }
+      // return models.Note.find({ user: me.id }).sort({ updated_at: -1 });
     },
     note: async (parent, args, {
       models
@@ -580,7 +582,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = (apollo_server_lambda__WEBPACK_IMPORTED_MODULE_0__["gql"]`
   extend type Query {
     note(id: ID!): Note
-    notes: [Note]
+    notes(filter: String): [Note]
   }
 
   extend type Mutation {
