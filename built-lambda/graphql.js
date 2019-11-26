@@ -320,12 +320,13 @@ __webpack_require__.r(__webpack_exports__);
       me,
       models
     }, info) => {
-      const notes = await models.Note.find({
+      let notes = await models.Note.find({
         user: me.id
       }).sort({
         updated_at: -1
       });
-      return notes.filter(note => note.title.includes(args.filter) || note.body.includes(args.filter)); // }
+      if (args.filter) notes = notes.filter(note => note.title.includes(args.filter) || note.body.includes(args.filter));
+      return notes; // }
       // return models.Note.find({ user: me.id }).sort({ updated_at: -1 });
     },
     note: async (parent, args, {
