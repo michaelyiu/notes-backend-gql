@@ -7,7 +7,7 @@ export default {
       let notes = await models.Note.find({ user: me.id }).sort({ updated_at: -1 })
 
       if (args.filter)
-        notes = notes.filter(note => note.title.includes(args.filter) || note.body.includes(args.filter))
+        notes = notes.filter(note => note.title.toLowerCase().includes(args.filter.toLowerCase()) || note.body.toLowerCase().includes(args.filter.toLowerCase()))
 
       return notes;
       // }
@@ -25,14 +25,6 @@ export default {
       async (parent, args, { me, models }, info) => {
         const { title, body } = args;
 
-        // const newNote = new models.Note({
-        //   title,
-        //   body,
-        //   user: me.id,
-        // })
-        // newNote.save((err) => {
-        //   if (err) throw new Error("Couldnt add post")
-        // })
         const newNote = await models.Note.create({
           title,
           body,
@@ -45,9 +37,7 @@ export default {
     editNote: combineResolvers(
       isAuthenticated,
       async (parent, args, { me, models }, info) => {
-        // const editedNote = await models.Note.updateOne({ _id: args.id }, { $set: { args } }, { new: true })
         const editedNote = await models.Note.findByIdAndUpdate(args.id, args, { new: true, 'upsert': true })
-
         return editedNote;
       }
     ),

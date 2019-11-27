@@ -325,7 +325,7 @@ __webpack_require__.r(__webpack_exports__);
       }).sort({
         updated_at: -1
       });
-      if (args.filter) notes = notes.filter(note => note.title.includes(args.filter) || note.body.includes(args.filter));
+      if (args.filter) notes = notes.filter(note => note.title.toLowerCase().includes(args.filter.toLowerCase()) || note.body.toLowerCase().includes(args.filter.toLowerCase()));
       return notes; // }
       // return models.Note.find({ user: me.id }).sort({ updated_at: -1 });
     },
@@ -344,15 +344,7 @@ __webpack_require__.r(__webpack_exports__);
       const {
         title,
         body
-      } = args; // const newNote = new models.Note({
-      //   title,
-      //   body,
-      //   user: me.id,
-      // })
-      // newNote.save((err) => {
-      //   if (err) throw new Error("Couldnt add post")
-      // })
-
+      } = args;
       const newNote = await models.Note.create({
         title,
         body,
@@ -364,7 +356,6 @@ __webpack_require__.r(__webpack_exports__);
       me,
       models
     }, info) => {
-      // const editedNote = await models.Note.updateOne({ _id: args.id }, { $set: { args } }, { new: true })
       const editedNote = await models.Note.findByIdAndUpdate(args.id, args, {
         new: true,
         'upsert': true
