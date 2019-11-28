@@ -175,7 +175,8 @@ const NoteSchema = new Schema({
     type: Date,
     default: Date.now
   }
-});
+}); //middleware hook
+
 NoteSchema.pre('findOneAndUpdate', function () {
   console.log('middleware triggered');
   this.update({}, {
@@ -220,7 +221,8 @@ const UserSchema = new Schema({
     type: Date,
     default: Date.now
   }
-});
+}); //middleware hook
+
 UserSchema.pre('findOneAndUpdate', function () {
   this.update({}, {
     $set: {
@@ -320,20 +322,20 @@ __webpack_require__.r(__webpack_exports__);
       me,
       models
     }, info) => {
+      //fetch notes and sort by last updated
       let notes = await models.Note.find({
         user: me.id
       }).sort({
         updated_at: -1
-      });
+      }); //if a filter exists, then apply it. case insensitive
+
       if (args.filter) notes = notes.filter(note => note.title.toLowerCase().includes(args.filter.toLowerCase()) || note.body.toLowerCase().includes(args.filter.toLowerCase()));
-      return notes; // }
-      // return models.Note.find({ user: me.id }).sort({ updated_at: -1 });
+      return notes;
     },
     note: async (parent, args, {
       models
     }, info) => {
-      const note = models.Note.findById(args.id);
-      return note;
+      return models.Note.findById(args.id);
     }
   },
   Mutation: {
@@ -356,11 +358,10 @@ __webpack_require__.r(__webpack_exports__);
       me,
       models
     }, info) => {
-      const editedNote = await models.Note.findByIdAndUpdate(args.id, args, {
+      return await models.Note.findByIdAndUpdate(args.id, args, {
         new: true,
         'upsert': true
       });
-      return editedNote;
     }),
     deleteNote: Object(graphql_resolvers__WEBPACK_IMPORTED_MODULE_0__["combineResolvers"])(_authorization__WEBPACK_IMPORTED_MODULE_1__["isAuthenticated"], async (parent, args, {
       me,
@@ -371,8 +372,6 @@ __webpack_require__.r(__webpack_exports__);
       if (!note) {
         throw new Error("Note not found");
       }
-
-      console.log(note);
 
       if (note.user.toString() !== me.id) {
         throw new Error("User not authorized");

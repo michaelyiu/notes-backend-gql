@@ -25,6 +25,7 @@ const UserSchema = new Schema({
 	}
 });
 
+//middleware hook
 UserSchema.pre('findOneAndUpdate', function () {
 	this.update({}, { $set: { updated_at: new Date() } });
 });

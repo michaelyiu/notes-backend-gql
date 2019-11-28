@@ -25,6 +25,7 @@ const NoteSchema = new Schema({
 	}
 })
 
+//middleware hook
 NoteSchema.pre('findOneAndUpdate', function () {
 	console.log('middleware triggered')
 	this.update({}, { $set: { updated_at: new Date() } });

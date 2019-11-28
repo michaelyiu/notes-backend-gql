@@ -58,11 +58,13 @@ export default {
 
     signIn: async (parent, args, { models, secret, me }, info) => {
       const { errors, isValid } = validateLoginInput(args);
+
       if (!isValid) {
         throw new UserInputError("Login failed!", { errors });
       }
 
       const { email } = args;
+
       const user = await models.User.findOne({ email }).then(async user => {
         if (!user) {
           errors.email = "User not found";
@@ -77,6 +79,7 @@ export default {
 
         return user;
       });
+
       const token = await createToken(user, secret);
       return {
         email: user.email,
